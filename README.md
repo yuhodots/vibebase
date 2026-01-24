@@ -24,7 +24,7 @@ pnpm install
 pnpm dev
 ```
 
-## Docker Setup
+### Docker
 
 ```bash
 docker-compose up
