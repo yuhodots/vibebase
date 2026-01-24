@@ -3,7 +3,7 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import uvicorn
-from core.configs import base
+from configs.base import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -12,7 +12,7 @@ from api.router import api_router
 
 # Configure logging
 logging.basicConfig(
-    level=getattr(logging, base.log_level.upper()),
+    level=getattr(logging, settings.log_level.upper()),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
@@ -31,8 +31,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 # Create FastAPI application
 app = FastAPI(
-    title=base.app_name,
-    version=base.version,
+    title=settings.app_name,
+    version=settings.version,
     description="Vibebase Core Backend API",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -43,7 +43,7 @@ app = FastAPI(
 # Add middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[base.cors_origin],
+    allow_origins=[settings.cors_origin],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -63,8 +63,8 @@ async def root():
     """Root endpoint."""
     return {
         "message": "Welcome to Vibebase Core API",
-        "version": base.version,
-        "environment": base.environment,
+        "version": settings.version,
+        "environment": settings.environment,
     }
 
 
@@ -74,5 +74,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=8000,
         reload=True,
-        log_level=base.log_level.lower(),
+        log_level=settings.log_level.lower(),
     )

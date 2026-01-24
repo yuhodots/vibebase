@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: ./core
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./core/.env
+    networks:
+      - vibebase-network
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env
+    networks:
+      - vibebase-network
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=http://backend:8000
+
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=vibebase_app_user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=vibebase
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - vibebase-network
+
+networks:
+  vibebase-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

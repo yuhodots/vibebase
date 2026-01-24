@@ -1,0 +1,9 @@
+{
+  "common": {
+    "hello": "Hello World",
+    "welcome": "Welcome to Vibebase",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "language": "Language"
+  }
+}

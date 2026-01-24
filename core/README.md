@@ -1,16 +1,44 @@
 # Vibebase Core
 
+FastAPI backend for Vibebase.
+
+## Setup
+
+```bash
+cd core
+uv sync
+```
+
+## Run
+
+```bash
+uv run uvicorn api.main:app --reload
+```
+
 ## Directory Structure
 
-- api: FastAPI application and API endpoints
-- clients: External API clients (OpenAI, Google, etc.)
-- configs: Environment and application settings
-- core: Core application logic (business logic, processing, etc.)
-- crawlers: Web crawlers for data collection
-- db: Database models and interactions
-- enums: Enumerations used across the application
-- resources: Static resources and assets
-- schemas: Data validation and serialization schemas
-- tests: Unit and integration tests
-- utils: Utility functions and helpers
-- workflows: Defined workflows and processes
+```
+core/
+├── api/                # FastAPI application
+│   ├── main.py         # App entry point
+│   ├── router.py       # Main router
+│   ├── routers/        # Route handlers
+│   └── dependencies/   # Dependency injection
+├── clients/            # External API clients (OpenAI, Google, etc.)
+├── configs/            # Environment and application settings
+│   ├── base.py         # Base app settings
+│   └── db.py           # Database settings
+├── db/                 # Database layer
+│   ├── models/         # SQLAlchemy models
+│   ├── ddl/            # DDL scripts
+│   └── alembic/        # Migrations
+├── domain/             # Core business logic
+├── schemas/            # Pydantic schemas (request/response)
+├── enums/              # Enumerations
+├── utils/              # Utility functions
+├── crawlers/           # Web crawlers
+├── workflows/          # Workflow definitions
+├── resources/          # Static resources
+│   └── prompts/        # LLM prompts
+└── tests/              # Tests
+```

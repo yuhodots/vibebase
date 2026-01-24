@@ -1,0 +1,9 @@
+{
+  "common": {
+    "hello": "안녕하세요",
+    "welcome": "Vibebase에 오신 것을 환영합니다",
+    "darkMode": "다크 모드",
+    "lightMode": "라이트 모드",
+    "language": "언어"
+  }
+}
