@@ -15,11 +15,14 @@ class Settings(BaseSettings):
     # Application
     app_name: str = Field(default="VIBEBASE CORE API", description="Application name")
     version: str = Field(default="0.1.0", description="Application version")
-    environment: str = Field(default="development", description="Environment (development, staging, production)")
+    environment: str = Field(
+        default="development", description="Environment (development, staging, production)"
+    )
     log_level: str = Field(default="INFO", description="Log level")
 
     # CORS
     cors_origin: str = Field(default="http://localhost:3000", description="Allowed CORS origin")
+
 
 @lru_cache
 def get_settings() -> Settings:
