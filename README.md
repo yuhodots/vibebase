@@ -18,6 +18,8 @@ uv run uvicorn api.main:app --reload
 
 ### Frontend
 
+If you want to run the frontend without authentication, you can handle it through the `AUTH_DISABLED` env variable in `frontend/.env.local`.
+
 ```bash
 cd frontend
 pnpm install
@@ -30,7 +32,7 @@ pnpm dev
 docker-compose up
 ```
 
-## Claude Code
+## Claude Code Setup
 
 The `.claude/` directory contains Claude Code configurations tailored for this project.
 Based on [everything-claude-code](https://github.com/yuhodots/everything-claude-code), adapted for Vibebase's FastAPI + Next.js stack.
