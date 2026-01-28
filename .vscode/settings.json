@@ -1,0 +1,18 @@
+{
+  "files.watcherExclude": {
+    "**/.next/**": true,
+    "**/node_modules/**": true,
+    "**/.git/objects/**": true,
+    "**/__pycache__/**": true,
+    "**/.venv/**": true
+  },
+  "search.exclude": {
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/pnpm-lock.yaml": true,
+    "**/__pycache__": true,
+    "**/.venv": true,
+    "**/uv.lock": true
+  },
+  "typescript.tsdk": "frontend/node_modules/typescript/lib"
+}

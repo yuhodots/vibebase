@@ -1,5 +1,6 @@
 'use client'
 
+import { AuthProvider } from './auth-provider'
 import { ThemeProvider } from './theme-provider'
 import { QueryProvider } from './query-provider'
 
@@ -9,13 +10,15 @@ type Props = {
 
 export function Providers({ children }: Props) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <QueryProvider>{children}</QueryProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <QueryProvider>{children}</QueryProvider>
+      </ThemeProvider>
+    </AuthProvider>
   )
 }

@@ -37,7 +37,6 @@ core/
 ├── enums/              # Enumerations
 ├── utils/              # Utility functions
 ├── crawlers/           # Web crawlers
-├── workflows/          # Workflow definitions
 ├── resources/          # Static resources
 │   └── prompts/        # LLM prompts
 └── tests/              # Tests

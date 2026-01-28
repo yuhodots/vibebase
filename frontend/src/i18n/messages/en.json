@@ -1,9 +1,43 @@
 {
   "common": {
-    "hello": "Hello World",
-    "welcome": "Welcome to Vibebase",
-    "darkMode": "Dark Mode",
-    "lightMode": "Light Mode",
-    "language": "Language"
+    "hello": "Hello",
+    "welcome": "Welcome to Vibebase"
+  },
+  "auth": {
+    "loginTitle": "Welcome Back",
+    "loginDescription": "Sign in with your social account to continue",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithKakao": "Continue with Kakao",
+    "signOut": "Sign Out",
+    "termsNotice": "By signing in, you agree to our Terms of Service"
+  },
+  "landing": {
+    "title": "Production-Ready Fullstack Template",
+    "description": "A starter kit built with FastAPI and Next.js",
+    "cta": "Get Started",
+    "feature1Title": "Rapid Development",
+    "feature1Desc": "Pre-configured auth, API, and UI components",
+    "feature2Title": "Security Built-in",
+    "feature2Desc": "OAuth authentication with security best practices",
+    "feature3Title": "Internationalization",
+    "feature3Desc": "Built-in support for multiple languages"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "help": "Help"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Your dashboard content will be displayed here."
   }
 }

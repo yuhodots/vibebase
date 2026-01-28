@@ -20,14 +20,19 @@ vibebase/
 │   ├── schemas/          # Pydantic schemas
 │   ├── clients/          # External API clients
 │   ├── crawlers/         # Web crawlers
-│   ├── utils/            # Utility functions
-│   └── workflows/        # Background workflows
+│   └── utils/            # Utility functions
 ├── frontend/             # Frontend (Next.js)
 │   └── src/
 │       ├── app/          # Next.js App Router (with [locale])
+│       │   ├── [locale]/
+│       │   │   ├── (landing)/    # Public pages (landing, login)
+│       │   │   └── (app)/        # Protected pages (dashboard)
+│       │   └── api/auth/         # Auth.js API routes
 │       ├── components/   # React components
-│       ├── hooks/        # Custom React hooks
-│       ├── providers/    # React context providers
+│       │   ├── layout/   # Layout components (sidebar)
+│       │   └── ui/       # UI components (button, etc.)
+│       ├── hooks/        # Custom React hooks (use-auth)
+│       ├── providers/    # React context providers (auth, theme, query)
 │       ├── i18n/         # Internationalization (ko, en)
 │       ├── lib/          # Utility libraries
 │       └── types/        # TypeScript definitions
@@ -98,3 +103,28 @@ DB_PASSWORD=password
 - Runs on `http://localhost:3000`
 - Internationalization: Korean (ko), English (en)
 - UI: shadcn/ui components with TailwindCSS
+
+## Authentication (Auth.js v5)
+
+Frontend handles all authentication via Auth.js with Google/Kakao OAuth.
+
+### Setup
+
+1. Copy `.env.local.example` to `.env.local`
+2. Generate secret: `openssl rand -base64 32`
+3. Configure OAuth providers:
+   - Google: https://console.cloud.google.com/apis/credentials
+   - Kakao: https://developers.kakao.com/console/app
+
+### Callback URLs
+
+```
+Google: http://localhost:3000/api/auth/callback/google
+Kakao: http://localhost:3000/api/auth/callback/kakao
+```
+
+### Protected Routes
+
+Configure in `frontend/src/middleware.ts`:
+- `/dashboard` - requires authentication
+- `/settings` - requires authentication

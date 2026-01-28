@@ -1,9 +1,43 @@
 {
   "common": {
     "hello": "안녕하세요",
-    "welcome": "Vibebase에 오신 것을 환영합니다",
-    "darkMode": "다크 모드",
-    "lightMode": "라이트 모드",
-    "language": "언어"
+    "welcome": "Vibebase에 오신 것을 환영합니다"
+  },
+  "auth": {
+    "loginTitle": "로그인",
+    "loginDescription": "소셜 계정으로 간편하게 시작하세요",
+    "continueWithGoogle": "Google로 계속하기",
+    "continueWithKakao": "카카오로 계속하기",
+    "signOut": "로그아웃",
+    "termsNotice": "로그인 시 서비스 이용약관에 동의하는 것으로 간주됩니다"
+  },
+  "landing": {
+    "title": "빠르게 시작하는 풀스택 템플릿",
+    "description": "FastAPI와 Next.js로 구성된 프로덕션 레디 스타터 키트",
+    "cta": "시작하기",
+    "feature1Title": "빠른 개발",
+    "feature1Desc": "사전 구성된 인증, API, UI 컴포넌트로 빠르게 시작",
+    "feature2Title": "보안 내장",
+    "feature2Desc": "OAuth 인증과 보안 모범 사례 적용",
+    "feature3Title": "다국어 지원",
+    "feature3Desc": "한국어, 영어 등 다국어 지원 내장"
+  },
+  "nav": {
+    "home": "홈",
+    "dashboard": "대시보드",
+    "settings": "설정",
+    "help": "도움말"
+  },
+  "settings": {
+    "title": "설정",
+    "theme": "테마",
+    "language": "언어",
+    "dark": "다크",
+    "light": "라이트",
+    "system": "시스템"
+  },
+  "dashboard": {
+    "title": "대시보드",
+    "description": "여기에 대시보드 콘텐츠가 표시됩니다."
   }
 }
