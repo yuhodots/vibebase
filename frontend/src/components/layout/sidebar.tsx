@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, useTransition } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useRouter } from "@/i18n";
+import { locales } from "@/i18n/config";
 import {
   LayoutDashboard,
   Home,
@@ -58,17 +59,20 @@ function NavLink({ item, isActive, label }: NavLinkProps) {
   );
 }
 
+const LOCALE_REGEX = new RegExp(`^/(${locales.join("|")})`);
+
 function useActivePath() {
   const pathname = usePathname();
-  const pathWithoutLocale = pathname.replace(/^\/(ko|en)/, "") || "/";
+  const pathWithoutLocale = pathname.replace(LOCALE_REGEX, "") || "/";
 
   return (href: string) =>
     href === "/" ? pathWithoutLocale === "/" : pathWithoutLocale.startsWith(href);
 }
 
-function useOutsideClick(callback: () => void) {
-  const ref = useRef<HTMLDivElement>(null);
-
+function useOutsideClick(
+  ref: React.RefObject<HTMLDivElement | null>,
+  callback: () => void
+) {
   useEffect(() => {
     function handleClick(event: MouseEvent) {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -77,9 +81,7 @@ function useOutsideClick(callback: () => void) {
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
-  }, [callback]);
-
-  return ref;
+  }, [ref, callback]);
 }
 
 export function Sidebar() {
@@ -94,12 +96,21 @@ export function Sidebar() {
   const { user, isAuthenticated, signOut } = useAuth();
 
   const [showSettings, setShowSettings] = useState(false);
-  const settingsRef = useOutsideClick(() => setShowSettings(false));
+  const [, startTransition] = useTransition();
+  const settingsRef = useRef<HTMLDivElement>(null);
 
-  const handleLanguageChange = (newLocale: string) => {
-    const pathWithoutLocale = pathname.replace(/^\/(ko|en)/, "") || "/";
-    router.replace(pathWithoutLocale, { locale: newLocale });
-  };
+  const closeSettings = useCallback(() => setShowSettings(false), []);
+  useOutsideClick(settingsRef, closeSettings);
+
+  const handleLanguageChange = useCallback(
+    (newLocale: string) => {
+      const pathWithoutLocale = pathname.replace(LOCALE_REGEX, "") || "/";
+      startTransition(() => {
+        router.replace(pathWithoutLocale, { locale: newLocale });
+      });
+    },
+    [pathname, router]
+  );
 
   const themeOptions = [
     { value: "light", label: tSettings("light"), icon: Sun },
