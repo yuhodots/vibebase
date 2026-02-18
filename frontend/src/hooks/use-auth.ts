@@ -18,6 +18,9 @@ export function useAuth() {
     user: session?.user ?? null,
     isAuthenticated: status === 'authenticated',
     isLoading: status === 'loading',
+    role: session?.user?.role ?? 'user',
+    isAdmin: session?.user?.role === 'admin',
+    backendToken: session?.backendToken ?? null,
     signIn,
     signOut,
   }
