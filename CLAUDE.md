@@ -5,7 +5,7 @@ A base repository for quickly bootstrapping any service with Python FastAPI back
 ## Tech Stack
 
 - **Backend**: Python 3.11+, FastAPI, SQLAlchemy, PostgreSQL, Alembic
-- **Frontend**: Next.js 16, React 19, TypeScript, TailwindCSS, next-intl
+- **Frontend**: Next.js 16, React 19, TypeScript, TailwindCSS, next-intl, Motion (Framer Motion)
 - **Infrastructure**: Docker, Docker Compose, uv (Python), pnpm (Node.js)
 
 ## Project Structure
@@ -18,7 +18,12 @@ vibebase/
 │   │   ├── router.py     # Main router (registers all feature routers)
 │   │   ├── rate_limit.py # Rate limiting config (slowapi)
 │   │   ├── routers/      # Route handlers
-│   │   │   └── auth.py   # Auth (callback, me, update, delete)
+│   │   │   ├── auth.py   # Auth (callback, me, update, delete)
+│   │   │   └── admin/    # Admin endpoints (requires admin role)
+│   │   │       ├── users.py  # User list, role update, soft-delete
+│   │   │       └── stats.py  # Dashboard statistics
+│   │   ├── utils/        # Shared API utilities
+│   │   │   └── query_helpers.py # SQL helpers (escape_like)
 │   │   └── dependencies/ # Dependency injection
 │   │       └── auth.py   # JWT auth (get_current_user, get_admin_user, etc.)
 │   ├── configs/          # Configuration settings (pydantic-settings)
@@ -34,7 +39,8 @@ vibebase/
 │   ├── schemas/          # Pydantic schemas
 │   │   ├── common.py     # CamelModel, PaginatedResponse, SuccessResponse
 │   │   └── api/          # API-specific schemas
-│   │       └── auth.py   # Auth request/response schemas
+│   │       ├── auth.py   # Auth request/response schemas
+│   │       └── admin.py  # Admin schemas (user list, role, stats)
 │   ├── enums/            # Enum definitions
 │   │   └── user.py       # UserRole (user, admin)
 │   ├── domain/           # Business logic services
@@ -51,6 +57,7 @@ vibebase/
 │       ├── auth.ts       # NextAuth config (Google, Kakao + backend token exchange)
 │       ├── middleware.ts  # i18n + auth middleware
 │       ├── components/   # React components
+│       │   ├── landing/  # Landing page sections (hero, features, CTA, etc.)
 │       │   ├── layout/   # Layout components (sidebar)
 │       │   └── ui/       # UI primitives (shadcn/ui)
 │       ├── hooks/        # Custom React hooks
@@ -136,6 +143,9 @@ Consistent constraint names via `NAMING_CONVENTION`: `ix_` (index), `uq_` (uniqu
 | Router | Prefix | Key Endpoints |
 |--------|--------|---------------|
 | auth | `/auth` | `POST /callback` (OAuth upsert), `GET /me`, `PUT /me`, `DELETE /me` |
+| admin | `/admin` | `GET /users` (paginated, search, role filter), `PUT /users/{id}/role`, `DELETE /users/{id}`, `GET /stats` |
+
+Admin endpoints require the `admin` role (enforced via `get_admin_user` dependency on the router).
 
 ### Schemas
 

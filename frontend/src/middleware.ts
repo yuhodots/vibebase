@@ -10,7 +10,7 @@ const intlMiddleware = createIntlMiddleware(routing)
 const isAuthDisabled = process.env.AUTH_DISABLED === 'true'
 
 // Add routes that require authentication here
-const protectedRoutes = ['/dashboard', '/settings']
+const protectedRoutes = ['/dashboard', '/settings', '/admin']
 
 function isProtectedRoute(pathname: string): boolean {
   const pathWithoutLocale = pathname.replace(/^\/(ko|en)/, '') || '/'

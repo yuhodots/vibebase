@@ -5,7 +5,7 @@ from typing import Literal
 
 from pydantic import EmailStr, Field
 
-from schemas.common import CamelModel
+from schemas.common import CamelModel, DbModel
 
 
 class AuthCallbackRequest(CamelModel):
@@ -31,11 +31,8 @@ class AuthCallbackResponse(CamelModel):
     token: str = Field(..., description="JWT access token")
 
 
-class UserResponse(CamelModel):
+class UserResponse(DbModel):
     """User profile response."""
-
-    model_config = CamelModel.model_config.copy()
-    model_config["from_attributes"] = True
 
     id: int
     email: str

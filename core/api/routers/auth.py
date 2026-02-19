@@ -1,7 +1,5 @@
 """Auth API endpoints."""
 
-import uuid
-
 from db.base import get_db
 from db.models.user import User
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -112,12 +110,7 @@ async def delete_me(
     db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse:
     """Soft-delete current user account. Anonymizes name and clears personal data."""
-    anonymous_id = uuid.uuid4().hex[:8]
-    user.email = f"deleted_{anonymous_id}@anonymized.local"
-    user.name = f"user{anonymous_id}"
-    user.image = None
-    user.bio = None
-    user.soft_delete()
+    user.anonymize()
 
     await db.commit()
     return SuccessResponse(message="Account deleted")

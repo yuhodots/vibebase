@@ -17,6 +17,16 @@ class CamelModel(BaseModel):
     )
 
 
+class DbModel(CamelModel):
+    """CamelModel with ORM attribute reading enabled (for SQLAlchemy models)."""
+
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True,
+    )
+
+
 class PaginatedResponse(CamelModel, Generic[T]):
     """Generic paginated response."""
 

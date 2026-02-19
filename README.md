@@ -1,6 +1,6 @@
 # Vibebase
 
-A base repository for quickly bootstrapping any service.
+A base repository for quickly bootstrapping any service with Python FastAPI backend and Next.js frontend.
 
 ![Vibebase Preview](./.assets/preview.png)
 

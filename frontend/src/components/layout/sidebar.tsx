@@ -18,6 +18,7 @@ import {
   Globe,
   Check,
   LogOut,
+  Shield,
   LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -93,7 +94,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const isActive = useActivePath();
-  const { user, isAuthenticated, signOut } = useAuth();
+  const { user, isAuthenticated, isAdmin, signOut } = useAuth();
 
   const [showSettings, setShowSettings] = useState(false);
   const [, startTransition] = useTransition();
@@ -267,6 +268,20 @@ export function Sidebar() {
                 </p>
               </div>
             </div>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className={cn(
+                  "flex w-full items-center gap-2.5 rounded-full px-3 py-2 text-[15px] font-medium transition-colors",
+                  isActive("/admin")
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                )}
+              >
+                <Shield className="h-5 w-5 shrink-0" />
+                <span>{t("admin")}</span>
+              </Link>
+            )}
             <button
               onClick={() => signOut()}
               className="flex w-full items-center gap-2.5 rounded-full px-3 py-2 text-[15px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"

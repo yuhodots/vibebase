@@ -82,4 +82,3 @@ export const apiClient = {
     fetchApi<T>(endpoint, { ...options, method: "DELETE" }),
 };
 
-export type { ApiResponse };

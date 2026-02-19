@@ -1,5 +1,7 @@
 """User database model."""
 
+import uuid
+
 from sqlalchemy import Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -27,6 +29,15 @@ class User(Base, TimestampMixin, SoftDeleteMixin):
     role: Mapped[str] = mapped_column(
         String(20), nullable=False, default="user", server_default="user"
     )
+
+    def anonymize(self) -> None:
+        """Anonymize personal data and soft-delete the user."""
+        anonymous_id = uuid.uuid4().hex[:8]
+        self.email = f"deleted_{anonymous_id}@anonymized.local"
+        self.name = f"user{anonymous_id}"
+        self.image = None
+        self.bio = None
+        self.soft_delete()
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}', provider='{self.provider}')>"
