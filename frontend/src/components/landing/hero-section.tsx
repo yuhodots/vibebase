@@ -155,7 +155,7 @@ export function HeroSection() {
             <motion.div
               initial={initial}
               whileInView={inView}
-              viewport={{ once: true }}
+              viewport={{}}
               transition={{ duration: 0.7 }}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border bg-card/80 backdrop-blur-sm text-xs font-medium text-muted-foreground mb-8"
             >
@@ -166,7 +166,7 @@ export function HeroSection() {
             <motion.h1
               initial={initial}
               whileInView={inView}
-              viewport={{ once: true }}
+              viewport={{}}
               transition={{ duration: 0.7, delay: 0.1 }}
               className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] whitespace-pre-line"
             >
@@ -176,7 +176,7 @@ export function HeroSection() {
             <motion.p
               initial={initial}
               whileInView={inView}
-              viewport={{ once: true }}
+              viewport={{}}
               transition={{ duration: 0.7, delay: 0.25 }}
               className="mt-6 text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-lg"
             >
@@ -186,7 +186,7 @@ export function HeroSection() {
             <motion.div
               initial={initial}
               whileInView={inView}
-              viewport={{ once: true }}
+              viewport={{}}
               transition={{ duration: 0.7, delay: 0.4 }}
               className="mt-10 flex flex-wrap items-center gap-4"
             >
@@ -212,7 +212,7 @@ export function HeroSection() {
             <motion.div
               initial={initial}
               whileInView={inView}
-              viewport={{ once: true }}
+              viewport={{}}
               transition={{ duration: 0.7, delay: 0.55 }}
               className="mt-12 flex items-center gap-6 text-muted-foreground/60"
             >
@@ -230,7 +230,7 @@ export function HeroSection() {
           <motion.div
             initial={shouldReduceMotion ? undefined : { opacity: 0, x: 40 }}
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{}}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="relative lg:pl-8"
           >

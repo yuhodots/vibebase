@@ -12,7 +12,12 @@ class DBSettings(BaseSettings):
         extra="ignore",
     )
 
-    # Database
+    # Database — when `database_url` is set (e.g. Neon, serverless), individual
+    # host/port/user/name/password fields are ignored.
+    database_url: str | None = Field(
+        default=None,
+        description="Full async DSN (e.g. postgresql+asyncpg://...). Overrides individual fields.",
+    )
     db_host: str = Field(default="localhost", description="Database host")
     db_port: int = Field(default=5432, description="Database port")
     db_user: str = Field(default="vibebase_app_user", description="Database user")

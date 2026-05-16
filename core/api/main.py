@@ -71,6 +71,12 @@ async def root():
     }
 
 
+@app.get("/health", tags=["Health"])
+async def health():
+    """Liveness probe for load balancers, orchestrators, and monitors."""
+    return {"status": "ok", "version": settings.version}
+
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",

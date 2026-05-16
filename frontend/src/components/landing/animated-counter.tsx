@@ -17,18 +17,23 @@ export function AnimatedCounter({
   duration = 2000,
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.5 })
+  const isInView = useInView(ref, { amount: 0.5 })
   const shouldReduceMotion = useReducedMotion()
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    if (!isInView) return
+    if (!isInView) {
+      setCount(0)
+      return
+    }
+
     if (shouldReduceMotion) {
       setCount(target)
       return
     }
 
     const startTime = performance.now()
+    let frameId: number
 
     function step(currentTime: number) {
       const elapsed = currentTime - startTime
@@ -37,11 +42,13 @@ export function AnimatedCounter({
       setCount(Math.round(eased * target))
 
       if (progress < 1) {
-        requestAnimationFrame(step)
+        frameId = requestAnimationFrame(step)
       }
     }
 
-    requestAnimationFrame(step)
+    frameId = requestAnimationFrame(step)
+
+    return () => cancelAnimationFrame(frameId)
   }, [isInView, target, duration, shouldReduceMotion])
 
   return (

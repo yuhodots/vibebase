@@ -1,15 +1,13 @@
 """Admin user management endpoints."""
 
 from db.base import get_db
-from db.models.user import User
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from domain.services.user_service import UserService
+from fastapi import APIRouter, Depends, Query, Request
 from schemas.api.admin import AdminUserResponse, AdminUserRoleRequest
 from schemas.common import PaginatedResponse, SuccessResponse, paginate
-from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.rate_limit import limiter
-from api.utils.query_helpers import escape_like
 
 router = APIRouter()
 
@@ -25,20 +23,8 @@ async def list_users(
     db: AsyncSession = Depends(get_db),
 ) -> PaginatedResponse[AdminUserResponse]:
     """List users with optional search and role filter (paginated)."""
-    query = select(User)
-
-    if search:
-        safe = escape_like(search)
-        query = query.where(User.name.ilike(f"%{safe}%") | User.email.ilike(f"%{safe}%"))
-    if role:
-        query = query.where(User.role == role)
-
-    total = await db.scalar(select(func.count()).select_from(query.subquery())) or 0
-
-    result = await db.execute(
-        query.order_by(User.created_at.desc()).offset((page - 1) * limit).limit(limit)
-    )
-    users = list(result.scalars().unique().all())
+    service = UserService(db)
+    users, total = await service.list_paginated(page=page, limit=limit, search=search, role=role)
     items = [AdminUserResponse.model_validate(user) for user in users]
     return PaginatedResponse(**paginate(total, page, limit, items))
 
@@ -52,14 +38,8 @@ async def update_user_role(
     db: AsyncSession = Depends(get_db),
 ) -> AdminUserResponse:
     """Update a user's role."""
-    result = await db.execute(select(User).where(User.id == user_id, User.is_active()))
-    user = result.scalar_one_or_none()
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
-    user.role = body.role
-    await db.commit()
-    await db.refresh(user)
+    service = UserService(db)
+    user = await service.update_role(user_id, body.role)
     return AdminUserResponse.model_validate(user)
 
 
@@ -71,12 +51,6 @@ async def delete_user(
     db: AsyncSession = Depends(get_db),
 ) -> SuccessResponse:
     """Soft-delete a user (anonymize email, name, clear image and bio)."""
-    result = await db.execute(select(User).where(User.id == user_id, User.is_active()))
-    user = result.scalar_one_or_none()
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
-    user.anonymize()
-
-    await db.commit()
+    service = UserService(db)
+    await service.delete_by_admin(user_id)
     return SuccessResponse(message="User deleted")
