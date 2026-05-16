@@ -33,6 +33,8 @@ vibebase/
 │   │   ├── base.py       # Base model, mixins (Timestamp, SoftDelete), session
 │   │   ├── models/       # SQLAlchemy models
 │   │   │   └── user.py   # User model (OAuth, roles)
+│   │   ├── repositories/ # Data-access layer (query/persistence only)
+│   │   │   └── user_repository.py # User queries (by provider, paginated, active)
 │   │   └── alembic/      # Migrations
 │   │       ├── env.py    # Migration environment
 │   │       └── versions/ # Migration files
@@ -43,7 +45,9 @@ vibebase/
 │   │       └── admin.py  # Admin schemas (user list, role, stats)
 │   ├── enums/            # Enum definitions
 │   │   └── user.py       # UserRole (user, admin)
-│   ├── domain/           # Business logic services
+│   ├── domain/           # Business logic
+│   │   └── services/     # Service layer (orchestrates repositories)
+│   │       └── user_service.py # OAuth upsert, profile update, role/soft-delete
 │   ├── clients/          # External API clients
 │   ├── utils/            # Utility functions
 │   └── tests/            # Tests
@@ -51,25 +55,38 @@ vibebase/
 │   └── src/
 │       ├── app/          # Next.js App Router
 │       │   ├── [locale]/ # Locale segment
-│       │   │   ├── (landing)/  # Public pages (landing, login)
-│       │   │   └── (app)/      # Protected pages (dashboard)
+│       │   │   ├── (landing)/  # Public pages (landing, login) — landing layout
+│       │   │   │   ├── layout.tsx
+│       │   │   │   ├── page.tsx       # Landing
+│       │   │   │   └── login/page.tsx # OAuth sign-in
+│       │   │   └── (app)/      # Protected pages — sidebar layout
+│       │   │       ├── layout.tsx
+│       │   │       ├── dashboard/page.tsx
+│       │   │       ├── admin/page.tsx # Admin console (users, stats)
+│       │   │       └── help/page.tsx
 │       │   └── api/auth/       # Auth.js API routes
 │       ├── auth.ts       # NextAuth config (Google, Kakao + backend token exchange)
 │       ├── middleware.ts  # i18n + auth middleware
 │       ├── components/   # React components
+│       │   ├── admin/    # Admin console (data table, tabs, users panel)
 │       │   ├── landing/  # Landing page sections (hero, features, CTA, etc.)
 │       │   ├── layout/   # Layout components (sidebar)
-│       │   └── ui/       # UI primitives (shadcn/ui)
+│       │   └── ui/       # UI primitives (button, input)
 │       ├── hooks/        # Custom React hooks
-│       │   └── use-auth.ts # Auth hook (session, role, backendToken)
+│       │   ├── use-auth.ts          # Auth hook (session, role, backendToken)
+│       │   ├── use-debounce.ts      # Debounce a value
+│       │   ├── use-outside-click.ts # Detect clicks outside a ref
+│       │   └── use-window-size.ts   # Track viewport size
 │       ├── providers/    # Context providers (auth, theme, query)
 │       ├── i18n/         # Internationalization (ko, en)
 │       ├── lib/
 │       │   ├── api/
-│       │   │   └── client.ts # API client (auto auth token injection)
+│       │   │   ├── client.ts # API client (auto auth token injection)
+│       │   │   └── admin.ts  # Admin API calls (users, stats)
 │       │   └── utils.ts  # Utility functions
 │       └── types/        # TypeScript definitions
-│           └── next-auth.d.ts # NextAuth type extensions
+│           ├── admin.ts        # Admin types (user list, role, stats)
+│           └── next-auth.d.ts  # NextAuth type extensions
 └── docker-compose.yml    # Docker orchestration
 ```
 
@@ -130,6 +147,11 @@ uv run ruff format .     # Format
 ### Naming Convention
 
 Consistent constraint names via `NAMING_CONVENTION`: `ix_` (index), `uq_` (unique), `ck_` (check), `fk_` (foreign key), `pk_` (primary key)
+
+### Repository / Service Split
+
+- `db/repositories/*` — data access only (SQLAlchemy queries, no business rules). Always filter with `Model.is_active()` for soft-delete-aware reads.
+- `domain/services/*` — business rules and transactions; orchestrates one or more repositories and commits the session. Routers call services, never repositories directly.
 
 ## API
 

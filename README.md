@@ -21,7 +21,8 @@ If you want to run the frontend without authentication, you can handle it throug
 ```bash
 cd frontend
 pnpm install
-pnpm dev
+pnpm dev           # Webpack dev server
+pnpm dev:turbo     # Optional: Turbopack
 ```
 
 ### Docker
